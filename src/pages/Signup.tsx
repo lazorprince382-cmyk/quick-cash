@@ -6,6 +6,7 @@ import "./Signup.css";
 
 const Signup: React.FC = () => {
   const signup = useMutation(api.signup.signup);
+  const simpleSignup = useMutation(api.auth.simpleSignup);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -28,22 +29,35 @@ const Signup: React.FC = () => {
     try {
       setLoading(true);
 
-      const res = await signup({
-        name,
-        email,
-        password,
-        phone,
-        referralCode: referral || undefined,
-      });
+      // Try main signup first
+      let res;
+      try {
+        res = await signup({
+          name,
+          email,
+          password,
+          phone,
+          referralCode: referral || undefined,
+        });
+      } catch (mainError) {
+        // If main signup fails, try backup
+        console.log("Main signup failed, trying backup...", mainError);
+        res = await simpleSignup({
+          name,
+          email,
+          password,
+          phone,
+        });
+      }
 
-      // FIX: Check for res.success instead of res.id
       if (res && res.success) {
         localStorage.setItem("qc_user", JSON.stringify({ 
+          id: res.userId,
           name: res.name,
           email: res.email,
           phone: res.phone,
           balance: res.balance,
-          referralEarnings: 0, // Default value since it's not returned
+          referralEarnings: 0,
           referralCode: res.referralCode,
           role: res.role
         }));

@@ -28,7 +28,7 @@ async function generateUniqueReferralCode(ctx: any): Promise<string> {
     attempts++;
   }
 
-  return "REF" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 4).toUpperCase();
+  return "REF" + Date.now().toString(36).toUpperCase();
 }
 
 export const signup = mutation({
@@ -50,13 +50,10 @@ export const signup = mutation({
     }
 
     const now = Date.now();
-    const passwordHash = password;
     const generatedReferralCode = await generateUniqueReferralCode(ctx);
 
     let referredBy = undefined;
-    let referrerBonusGiven = false;
     
-    // Process referral code if provided (optional)
     if (referralCode && referralCode.trim() !== "") {
       const referrer = await ctx.db
         .query("users")
@@ -66,14 +63,12 @@ export const signup = mutation({
       if (referrer) {
         referredBy = referrer._id;
         
-        // Give welcome bonus to referrer for successful signup
         const referrerBonus = 500;
         await ctx.db.patch(referrer._id, {
-          balance: referrer.balance + referrerBonus,
+          balance: (referrer.balance || 0) + referrerBonus,
           referralEarnings: (referrer.referralEarnings || 0) + referrerBonus,
         });
 
-        // Record referrer bonus transaction
         await ctx.db.insert("transactions", {
           userId: referrer._id,
           type: "referral",
@@ -81,19 +76,15 @@ export const signup = mutation({
           description: `Referral signup bonus for ${name}`,
           createdAt: now,
         });
-
-        referrerBonusGiven = true;
       }
-      // If referral code is invalid, just ignore it (don't throw error)
     }
 
-    // Create new user
     const userId = await ctx.db.insert("users", {
       name,
       email,
       phone,
-      passwordHash,
-      balance: 2000, // Welcome bonus for new user
+      passwordHash: password,
+      balance: 2000,
       referralCode: generatedReferralCode,
       referralEarnings: 0,
       referredBy,
@@ -105,22 +96,21 @@ export const signup = mutation({
       createdAt: now,
     });
 
-    // Create referral record if user was referred
     if (referredBy && referralCode) {
       await ctx.db.insert("referrals", {
         referrerId: referredBy,
         referredUserId: userId,
         referralCode: referralCode,
         status: "signed_up",
-        welcomeBonusGiven: referrerBonusGiven,
+        welcomeBonusGiven: true,
         signupDate: now,
       });
     }
 
-    // Return user data (simple types only - no Id objects)
     return {
       success: true,
       message: "User registered successfully",
+      userId: userId.toString(),
       name,
       email,
       phone,
