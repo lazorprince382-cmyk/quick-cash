@@ -86,15 +86,14 @@ const Invest: React.FC = () => {
     }
   };
 
-  // Rest of your Invest.tsx component remains the same...
-  // Calculate package details for display
+  // Calculate package details for display - FIXED VERSION
   const calculatePackageDetails = (pkg: Package) => {
-    const totalReturn = Math.round(pkg.amount * pkg.rate);
-    const profit = totalReturn - pkg.amount;
-    const dailyReturn = Math.round(profit / pkg.durationDays);
-    const margin = `${((pkg.rate - 1) * 100).toFixed(1)}%`;
+    const dailyProfit = Math.round(pkg.amount * 0.5); // 50% daily
+    const totalProfit = dailyProfit * pkg.durationDays; // Total over contract period
+    const totalReturn = pkg.amount + totalProfit;
+    const margin = "50.0%"; // Fixed 50% daily profit margin
     
-    return { totalReturn, profit, dailyReturn, margin };
+    return { totalReturn, dailyProfit, margin };
   };
 
   // Redirect if not signed in
@@ -140,7 +139,7 @@ const Invest: React.FC = () => {
 
       <div className="packages-grid">
         {packages.map((pkg) => {
-          const { totalReturn, profit, dailyReturn, margin } = calculatePackageDetails(pkg);
+          const { totalReturn, dailyProfit, margin } = calculatePackageDetails(pkg);
           const canPurchase = user?.balance >= pkg.amount;
           const shortfall = Math.max(0, pkg.amount - (user?.balance || 0));
 
@@ -149,10 +148,9 @@ const Invest: React.FC = () => {
               <h3>{pkg.name}</h3>
               <div className="package-details">
                 <p><strong>Investment Amount:</strong> UGX {pkg.amount.toLocaleString()}</p>
-                <p><strong>Daily Return:</strong> UGX {dailyReturn.toLocaleString()}</p>
+                <p><strong>Daily Profit:</strong> UGX {dailyProfit.toLocaleString()}</p>
                 <p><strong>Contract Period:</strong> {pkg.durationDays} Days</p>
                 <p><strong>Total Return:</strong> UGX {totalReturn.toLocaleString()}</p>
-                <p><strong>Profit:</strong> UGX {profit.toLocaleString()}</p>
                 <p><strong>Profit Margin:</strong> {margin}</p>
                 {pkg.description && <p className="package-description"><em>{pkg.description}</em></p>}
               </div>

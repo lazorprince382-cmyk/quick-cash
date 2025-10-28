@@ -35,8 +35,10 @@ export const purchasePackage = mutation({
       throw new Error(`Insufficient balance. Need UGX ${pkg.amount}, but only have UGX ${user.balance}`);
     }
 
-    // Calculate returns
-    const totalReturn = pkg.amount * pkg.rate;
+    // 50% DAILY profits for 3 days
+    const dailyProfit = Math.round(pkg.amount * 0.5); // 50% daily
+    const totalProfit = dailyProfit * pkg.durationDays; // Total over 3 days
+    const totalReturn = pkg.amount + totalProfit;
     const maturityDate = Date.now() + (pkg.durationDays * 24 * 60 * 60 * 1000);
 
     // Create investment
@@ -50,6 +52,10 @@ export const purchasePackage = mutation({
       status: "active",
       purchaseDate: Date.now(),
       maturityDate: maturityDate,
+      dailyProfit: dailyProfit, // 50% of investment daily
+      totalProfit: totalProfit,
+      earnedSoFar: 0,
+      lastPayoutDate: Date.now(),
     });
 
     // Update user balance
@@ -62,7 +68,8 @@ export const purchasePackage = mutation({
       success: true, 
       investmentId,
       newBalance: user.balance - pkg.amount,
-      message: `Successfully purchased ${pkg.name}!`
+      dailyProfit: dailyProfit,
+      message: `Successfully purchased ${pkg.name}! You will earn UGX ${dailyProfit} daily for ${pkg.durationDays} days.`
     };
   },
 });
