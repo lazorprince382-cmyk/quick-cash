@@ -82,8 +82,9 @@ export const signup = mutation({
       createdAt: now,
     });
 
+    // FIX: Change 'id' to 'userId' to be consistent
     return {
-      id: userId,
+      userId, // Changed from 'id: userId'
       name,
       email,
       phone,

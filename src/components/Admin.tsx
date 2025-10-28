@@ -1,5 +1,5 @@
 // Admin.tsx - Update the withdrawals section
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import "./Admin.css";
@@ -25,6 +25,66 @@ const Admin: React.FC = () => {
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
     setTimeout(() => setNotification(null), 3000);
+  };
+
+  // Handle deposit approval
+  const handleApproveDeposit = async (depositId: string) => {
+    try {
+      setLoading(depositId);
+      setError(null);
+      
+      const adminUser = JSON.parse(localStorage.getItem("qc_user") || "{}");
+      
+      const result = await approveDeposit({ 
+        depositId: depositId as any, 
+        adminId: adminUser.id 
+      });
+
+      if (result.success) {
+        setMessage("Deposit approved successfully!");
+        showNotification('success', "Deposit approved! User balance updated.");
+        
+        // Refresh data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to approve deposit");
+      showNotification('error', e?.message || "Failed to approve deposit");
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  // Handle deposit rejection
+  const handleRejectDeposit = async (depositId: string) => {
+    try {
+      setLoading(depositId);
+      setError(null);
+      
+      const adminUser = JSON.parse(localStorage.getItem("qc_user") || "{}");
+      
+      const result = await rejectDeposit({ 
+        depositId: depositId as any, 
+        adminId: adminUser.id 
+      });
+
+      if (result.success) {
+        setMessage("Deposit rejected successfully!");
+        showNotification('success', "Deposit rejected.");
+        
+        // Refresh data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      }
+    } catch (e: any) {
+      setError(e?.message || "Failed to reject deposit");
+      showNotification('error', e?.message || "Failed to reject deposit");
+    } finally {
+      setLoading(null);
+    }
   };
 
   // Handle withdrawal actions
