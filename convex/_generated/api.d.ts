@@ -14,6 +14,7 @@ import type * as cron from "../cron.js";
 import type * as deposits from "../deposits.js";
 import type * as investments from "../investments.js";
 import type * as packages from "../packages.js";
+import type * as referrals from "../referrals.js";
 import type * as signin from "../signin.js";
 import type * as signup from "../signup.js";
 import type * as users from "../users.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   deposits: typeof deposits;
   investments: typeof investments;
   packages: typeof packages;
+  referrals: typeof referrals;
   signin: typeof signin;
   signup: typeof signup;
   users: typeof users;

@@ -1,4 +1,4 @@
-// convex/schema.ts - CORRECTED VERSION
+// convex/schema.ts - COMPLETE CORRECTED VERSION
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -131,7 +131,6 @@ export default defineSchema({
     .index("by_admin", ["adminId"])
     .index("by_created", ["createdAt"]),
 
-  // FIXED: Single transactions table definition with support for multiple related IDs
   transactions: defineTable({
     userId: v.id("users"),
     type: v.union(
@@ -148,11 +147,27 @@ export default defineSchema({
       v.id("deposits"),
       v.id("withdrawals"),
       v.id("investments")
-    )), // FIXED: Now supports deposits, withdrawals, and investments
+    )),
     adminId: v.optional(v.id("users")),
     createdAt: v.number(),
   })
     .index("by_user", ["userId"])
     .index("by_type", ["type"])
     .index("by_created", ["createdAt"]),
+
+  // ADD THE REFERRALS TABLE - THIS WAS MISSING!
+  referrals: defineTable({
+    referrerId: v.id("users"),
+    referredUserId: v.optional(v.id("users")),
+    referralCode: v.string(),
+    status: v.union(v.literal("signed_up"), v.literal("deposited"), v.literal("completed")),
+    welcomeBonusGiven: v.boolean(),
+    commissionEarned: v.optional(v.number()),
+    depositAmount: v.optional(v.number()),
+    signupDate: v.number(),
+    commissionDate: v.optional(v.number()),
+  })
+    .index("by_referrer", ["referrerId"])
+    .index("by_referred", ["referredUserId"])
+    .index("by_code", ["referralCode"]),
 });
