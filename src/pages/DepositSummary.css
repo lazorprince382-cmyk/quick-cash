@@ -1,0 +1,61 @@
+.summary-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.summary-footer .btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.confirm-btn {
+  background: linear-gradient(to right, #10b981, #059669);
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(to right, #059669, #047857);
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  background: linear-gradient(to right, #ef4444, #dc2626);
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: linear-gradient(to right, #dc2626, #b91c1c);
+  transform: translateY(-2px);
+}
+
+.back-btn {
+  background: #6b7280;
+  color: white;
+}
+
+.back-btn:hover {
+  background: #4b5563;
+  transform: translateY(-2px);
+}
+
+/* Responsive design for buttons */
+@media (min-width: 768px) {
+  .summary-footer {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .summary-footer .btn {
+    flex: 1;
+    margin: 0 5px;
+  }
+}

@@ -1,0 +1,153 @@
+/* Container */
+.invest-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Header */
+.invest-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.invest-header h1 {
+  font-size: 2rem;
+  color: #059669;
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.balance-box {
+  background-color: #10b981;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.intro-message {
+  font-size: 1rem;
+  color: #374151;
+}
+
+/* Requirements Card */
+.requirements-card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.requirements-card h3 {
+  color: #059669;
+  margin-bottom: 1rem;
+}
+
+.requirements-card ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+/* Packages Grid */
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+/* Package Card */
+.package-card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.package-card h3 {
+  color: #059669;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.package-details p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+/* Buttons */
+.btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  color: white;
+}
+
+.btn.green {
+  background-color: #059669;
+}
+
+.btn.green:hover {
+  background-color: #047857;
+}
+
+.btn.gray {
+  background-color: #6b7280;
+  cursor: not-allowed;
+}
+
+.btn.gray:hover {
+  background-color: #4b5563;
+}
+
+/* Footer */
+.invest-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 2rem;
+}
+
+.footer-logo {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(to right, #059669, #10b981);
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+}
+
+.footer-note {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}

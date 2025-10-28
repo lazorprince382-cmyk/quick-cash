@@ -1,0 +1,260 @@
+/* Container */
+.deposit-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Header */
+.deposit-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.deposit-header h1 {
+  font-size: 2rem;
+  color: #059669;
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.balance-box {
+  background-color: #10b981;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* Instructions */
+.instructions-card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.instructions-card h3 {
+  color: #059669;
+  margin-bottom: 1rem;
+}
+
+.instructions-card ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.limits-box p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* Form */
+.deposit-form {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.deposit-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.deposit-form input,
+.deposit-form select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #ffffff;
+}
+
+.deposit-form input:focus,
+.deposit-form select:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* Button */
+.btn.green {
+  background-color: #059669;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn.green:hover {
+  background-color: #047857;
+}
+
+/* Footer */
+.deposit-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 3rem;
+}
+
+.footer-logo {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(to right, #059669, #10b981);
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+}
+
+.footer-note {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* ✅ New Additions */
+.success-message {
+  color: #059669;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.btn.green:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+/* Add to your existing Deposit.css */
+.deposit-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: white;
+}
+
+.deposit-item.status-pending {
+  border-left: 4px solid #ffa500;
+  background: #fffaf0;
+}
+
+.deposit-item.status-completed {
+  border-left: 4px solid #28a745;
+  background: #f8fff9;
+}
+
+.deposit-item.status-failed {
+  border-left: 4px solid #dc3545;
+  background: #fff5f5;
+}
+
+.deposit-item.status-cancelled {
+  border-left: 4px solid #6c757d;
+  background: #f8f9fa;
+}
+
+.deposit-header-info {
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.deposit-amount {
+  font-weight: bold;
+  color: #2c5530;
+  margin-bottom: 5px;
+}
+
+.deposit-method {
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.deposit-status {
+  margin-bottom: 8px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.status-pending .status-badge {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-completed .status-badge {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-failed .status-badge {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-cancelled .status-badge {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.deposit-date {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.approved-date {
+  font-size: 0.75em;
+  color: #28a745;
+  margin-top: 4px;
+}
+
+.deposit-list {
+  margin-top: 30px;
+}
+
+.deposit-list h3 {
+  color: #2c5530;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 8px;
+}
