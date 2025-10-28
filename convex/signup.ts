@@ -1,3 +1,4 @@
+// convex/signup.ts - COMPLETE UPDATED VERSION
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -53,22 +54,45 @@ export const signup = mutation({
     const generatedReferralCode = await generateUniqueReferralCode(ctx);
 
     let referredBy = undefined;
+    let referrerBonusGiven = false;
+    
+    // Process referral code if provided
     if (referralCode) {
       const referrer = await ctx.db
         .query("users")
         .withIndex("by_referralCode", (q: any) => q.eq("referralCode", referralCode))
         .first();
+      
       if (referrer) {
         referredBy = referrer._id;
+        
+        // Give welcome bonus to referrer for successful signup
+        const referrerBonus = 500;
+        await ctx.db.patch(referrer._id, {
+          balance: referrer.balance + referrerBonus,
+          referralEarnings: (referrer.referralEarnings || 0) + referrerBonus,
+        });
+
+        // Record referrer bonus transaction
+        await ctx.db.insert("transactions", {
+          userId: referrer._id,
+          type: "referral",
+          amount: referrerBonus,
+          description: `Referral signup bonus for ${name}`,
+          createdAt: now,
+        });
+
+        referrerBonusGiven = true;
       }
     }
 
+    // Create new user
     const userId = await ctx.db.insert("users", {
       name,
       email,
       phone,
       passwordHash,
-      balance: 2000,
+      balance: 2000, // Welcome bonus for new user
       referralCode: generatedReferralCode,
       referralEarnings: 0,
       referredBy,
@@ -80,16 +104,30 @@ export const signup = mutation({
       createdAt: now,
     });
 
-    // FIX: Return only simple data types, no Id types
+    // Create referral record if user was referred
+    if (referredBy && referralCode) {
+      await ctx.db.insert("referrals", {
+        referrerId: referredBy,
+        referredUserId: userId,
+        referralCode: referralCode,
+        status: "signed_up",
+        welcomeBonusGiven: referrerBonusGiven,
+        signupDate: now,
+      });
+    }
+
+    // Return user data (simple types only)
     return {
       success: true,
       message: "User registered successfully",
+      userId: userId.toString(),
       name,
       email,
       phone,
       balance: 2000,
       role: "user",
       referralCode: generatedReferralCode,
+      referredBy: referredBy ? referredBy.toString() : null,
     };
   },
 });
