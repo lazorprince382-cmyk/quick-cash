@@ -1,4 +1,4 @@
-// convex/signup.ts - COMPLETE UPDATED VERSION
+// convex/signup.ts - FIXED VERSION
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -56,11 +56,11 @@ export const signup = mutation({
     let referredBy = undefined;
     let referrerBonusGiven = false;
     
-    // Process referral code if provided
-    if (referralCode) {
+    // Process referral code if provided (optional)
+    if (referralCode && referralCode.trim() !== "") {
       const referrer = await ctx.db
         .query("users")
-        .withIndex("by_referralCode", (q: any) => q.eq("referralCode", referralCode))
+        .withIndex("by_referralCode", (q: any) => q.eq("referralCode", referralCode.trim()))
         .first();
       
       if (referrer) {
@@ -84,6 +84,7 @@ export const signup = mutation({
 
         referrerBonusGiven = true;
       }
+      // If referral code is invalid, just ignore it (don't throw error)
     }
 
     // Create new user
@@ -116,18 +117,16 @@ export const signup = mutation({
       });
     }
 
-    // Return user data (simple types only)
+    // Return user data (simple types only - no Id objects)
     return {
       success: true,
       message: "User registered successfully",
-      userId: userId.toString(),
       name,
       email,
       phone,
       balance: 2000,
       role: "user",
       referralCode: generatedReferralCode,
-      referredBy: referredBy ? referredBy.toString() : null,
     };
   },
 });

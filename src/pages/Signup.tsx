@@ -5,7 +5,7 @@ import { api } from "../../convex/_generated/api";
 import "./Signup.css";
 
 const Signup: React.FC = () => {
-  const signup = useMutation(api.signup.signup) as any;
+  const signup = useMutation(api.signup.signup);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -36,14 +36,14 @@ const Signup: React.FC = () => {
         referralCode: referral || undefined,
       });
 
-      if (res && res.id) {
+      // FIX: Check for res.success instead of res.id
+      if (res && res.success) {
         localStorage.setItem("qc_user", JSON.stringify({ 
-          id: res.id, 
           name: res.name,
           email: res.email,
           phone: res.phone,
-          balance: res.balance, // This will now be 1500
-          referralEarnings: res.referralEarnings,
+          balance: res.balance,
+          referralEarnings: 0, // Default value since it's not returned
           referralCode: res.referralCode,
           role: res.role
         }));
@@ -70,7 +70,7 @@ const Signup: React.FC = () => {
         <div className="logo-box">QC</div>
         <h1>Quick Cash</h1>
         <p className="subtitle">Ugandan Money Investment Platform</p>
-        <p className="bonus-text">Welcome to Quick Cash an online investment platform! earn daily and boost your life.</p> {/* UPDATED TEXT */}
+        <p className="bonus-text">Welcome to Quick Cash an online investment platform! earn daily and boost your life.</p>
       </div>
 
       <div className="signup-form-card">
