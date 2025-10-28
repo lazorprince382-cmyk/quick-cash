@@ -9,12 +9,11 @@ async function generateUniqueReferralCode(ctx: any): Promise<string> {
   let referralCode: string;
   let isUnique = false;
   let attempts = 0;
-  const maxAttempts = 10; // Prevent infinite loop
+  const maxAttempts = 10;
 
   while (!isUnique && attempts < maxAttempts) {
     referralCode = generateReferralCode();
     
-    // Check if this referral code already exists
     const existingUser = await ctx.db
       .query("users")
       .withIndex("by_referralCode", (q: any) => q.eq("referralCode", referralCode))
@@ -28,7 +27,6 @@ async function generateUniqueReferralCode(ctx: any): Promise<string> {
     attempts++;
   }
 
-  // Fallback: use timestamp + random string if all attempts fail
   return "REF" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 4).toUpperCase();
 }
 
@@ -51,7 +49,7 @@ export const signup = mutation({
     }
 
     const now = Date.now();
-    const passwordHash = password; // Storing plain text for now
+    const passwordHash = password;
     const generatedReferralCode = await generateUniqueReferralCode(ctx);
 
     let referredBy = undefined;
@@ -82,14 +80,14 @@ export const signup = mutation({
       createdAt: now,
     });
 
-    // FIX: Convert userId to string for the return object
+    // FIX: Return only simple data types, no Id types
     return {
-      userId: userId.toString(), // Convert Id to string
+      success: true,
+      message: "User registered successfully",
       name,
       email,
       phone,
       balance: 2000,
-      referralEarnings: 0,
       role: "user",
       referralCode: generatedReferralCode,
     };
