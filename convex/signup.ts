@@ -82,9 +82,9 @@ export const signup = mutation({
       createdAt: now,
     });
 
-    // FIX: Change 'id' to 'userId' to be consistent
+    // FIX: Convert userId to string for the return object
     return {
-      userId, // Changed from 'id: userId'
+      userId: userId.toString(), // Convert Id to string
       name,
       email,
       phone,
