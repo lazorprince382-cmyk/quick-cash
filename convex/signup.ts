@@ -1,6 +1,7 @@
 // convex/signup.ts - FIXED VERSION
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { Id } from "./_generated/dataModel";
 
 function generateReferralCode(): string {
   return "REF" + Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -52,7 +53,7 @@ export const signup = mutation({
     const now = Date.now();
     const generatedReferralCode = await generateUniqueReferralCode(ctx);
 
-    let referredBy = undefined;
+    let referredBy: Id<"users"> | undefined = undefined;
     
     if (referralCode && referralCode.trim() !== "") {
       const referrer = await ctx.db

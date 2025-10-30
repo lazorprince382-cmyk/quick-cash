@@ -1,6 +1,7 @@
-// convex/referrals.ts - COMPLETE UPDATED VERSION
+// convex/referrals.ts - FIXED VERSION
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { Id } from "./_generated/dataModel";
 
 // Get user's referral stats
 export const getReferralStats = query({
@@ -9,7 +10,6 @@ export const getReferralStats = query({
     const user = await ctx.db.get(userId);
     if (!user) return null;
 
-    // Use proper type-safe query
     const referrals = await ctx.db
       .query("referrals")
       .withIndex("by_referrer", (q) => q.eq("referrerId", userId))
@@ -42,7 +42,7 @@ export const getReferralLink = query({
   },
 });
 
-// Get user's referral history
+// Get user's referral history - FIXED VERSION
 export const getUserReferrals = query({
   args: { userId: v.id("users") },
   handler: async (ctx, { userId }) => {
@@ -51,17 +51,24 @@ export const getUserReferrals = query({
       .withIndex("by_referrer", (q) => q.eq("referrerId", userId))
       .collect();
 
-    // Get referred users details
+    // Get referred users details with proper type safety
     const referralsWithDetails = await Promise.all(
       referrals.map(async (ref) => {
-        let referredUser = null;
+        let referredUserName = "Unknown";
+        let referredUserEmail = "Unknown";
+        
         if (ref.referredUserId) {
-          referredUser = await ctx.db.get(ref.referredUserId);
+          const referredUser = await ctx.db.get(ref.referredUserId);
+          if (referredUser) {
+            referredUserName = referredUser.name || "Unknown";
+            referredUserEmail = referredUser.email || "Unknown";
+          }
         }
+        
         return {
           ...ref,
-          referredUserName: referredUser?.name || "Unknown",
-          referredUserEmail: referredUser?.email || "Unknown",
+          referredUserName,
+          referredUserEmail,
         };
       })
     );
@@ -104,7 +111,7 @@ export const processReferralCommission = mutation({
         
         // Update referrer's balance and earnings
         await ctx.db.patch(referrer._id, {
-          balance: referrer.balance + commission,
+          balance: (referrer.balance || 0) + commission,
           referralEarnings: (referrer.referralEarnings || 0) + commission,
         });
 
