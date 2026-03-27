@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import "./Signup.css";
@@ -8,6 +8,7 @@ const Signup: React.FC = () => {
   const signup = useMutation(api.signup.signup);
   const simpleSignup = useMutation(api.auth.simpleSignup);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,6 +17,14 @@ const Signup: React.FC = () => {
   const [referral, setReferral] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      setReferral(ref);
+    }
+  }, [location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
